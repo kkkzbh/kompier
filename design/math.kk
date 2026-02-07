@@ -21,10 +21,11 @@ export add(a: int,b) -> int
 // 不写的返回类型 也当作auto处理
 export mul(x,y)
 {
-    let ret = T(x * y);
+    ret = x * y;
     return ret;
 }
 
+// 泛型参数在名字的后面用<>指出，对泛型名字的类型声明语义为约束(concept)
 export del<T, U: Integer>(x: T,y: U)
 {
     return x / y;

@@ -12,11 +12,10 @@ simple_var_statement()
     const ten = 10;     // int
     const pi = 3.14;    // double
     const pi2 = float(3.14); // float
-    // const的语义为不可变变量  TODO: 编译期计算先不考虑，让实现能简单一些
-
-    let a = 3;
-    let uninit_a = int();
-    // 默认允许非初始化的变量，但使用是UB行为。 但提供关掉该方式的编译选项
+    // const的语义为编译期计算
+    a = 3;
+    uninit_a = int();
+    // 使用未初始化的数值会编译报错
 }
 
 main()      // main函数不写返回类型
@@ -26,29 +25,51 @@ main()      // main函数不写返回类型
 
 simple_array_and_tuple_state()
 {
-    let arr = [int; 10]{}; // uninit array
-    let brr = [int; 10]{ 0 }; // init array
+    arr = [int; 10]{}; // uninit array
+    brr = [int; 10]{ 0 }; // init array
     // 允许非初始化的数组
     // 使用未初始化的值应当直接作为编译报错处理
-    let a = 2;
-    let b = 4;
-    let c = add(a,b);
-    // let的语义为可变变量
+    a = 2;
+    b = 4;
+    c = add(a,b);
+    mut d = 123;  // 可变变量
+    // 直接声明变量为不可变变量
 
-    let tuple = (int,double,short,[int; 3]){}; // 未初始化元组
-    let t2 = (int,[int; 3]){ 4,{ 1,2,3 } };
+    // 1: int
+    // 1l: long
+    // 1ul: ulong
+    // 1u: uint
+    // 1.: double
+    // 1f: float
 
-    // 允许类似CRTP的行为
-    let t3 = (1,2,3,(1,2),[3,4,5]);
-    let t4 = (int(2), 3, [int; 2]{ 1,2 });
-    let a2 = [1,2,3];
-    let a3 = [(1,2),(3,4),(5,6)];
+    tuple = (int,double,short,[int; 3]){}; // 未初始化元组
+    t2 = (int,[int; 3]){ 4,{ 1,2,3 } };
+
+    // 允许类似CTAD的行为
+    t3 = (1,2,3,(1,2),[3,4,5]);
+    t4 = (int(2), 3, [int; 2]{ 1,2 });
+    a2 = [1,2,3];
+    a3 = [(1,2),(3,4),(5,6)];
     // 对于数组，类型统一提升到common(如果允许)
+
+    // 不允许窄化
+    // int可提升到uint
+    // 数组与tuple兼容C结构体
+    // float可提升到double
 
     // 可组合
 }
 
+// 字符串类型
+string_type() -> void
+{
+    str = "Hello World";
+    c = 'A';
+    // string是结构类型，兼容C API，具体实现细节等设计结构体再考虑
+
+}
+
 branch_state() -> void // 声明无返回值
 {
-    // TODO
+    // 待定
 }
