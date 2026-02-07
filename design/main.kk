@@ -2,7 +2,7 @@
 
 // char byte short int long
 
-import math;    // 导入add和mul两个符号
+import math;    // 引入命名空间 math
 
 // 对于可导出符号的模块 允许导入再导出语句 export import math;
 
@@ -11,10 +11,10 @@ simple_var_statement()
 {
     const ten = 10;     // int
     const pi = 3.14;    // double
-    const pi2 = float(3.14); // float
+    const pi2 = float{3.14}; // float
     // const的语义为编译期计算
     a = 3;
-    uninit_a = int();
+    uninit_a = int{};
     // 使用未初始化的数值会编译报错
 }
 
@@ -31,7 +31,7 @@ simple_array_and_tuple_state()
     // 使用未初始化的值应当直接作为编译报错处理
     a = 2;
     b = 4;
-    c = add(a,b);
+    c = math::add(a,b);
     mut d = 123;  // 可变变量
     // 直接声明变量为不可变变量
 
@@ -47,7 +47,7 @@ simple_array_and_tuple_state()
 
     // 允许类似CTAD的行为
     t3 = (1,2,3,(1,2),[3,4,5]);
-    t4 = (int(2), 3, [int; 2]{ 1,2 });
+    t4 = (int{2}, 3, [int; 2]{ 1,2 });
     a2 = [1,2,3];
     a3 = [(1,2),(3,4),(5,6)];
     // 对于数组，类型统一提升到common(如果允许)

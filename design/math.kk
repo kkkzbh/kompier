@@ -1,12 +1,12 @@
 export module math;     // 一个文件对应一个模块
 
-// 内部可见性：在 module math 内部，math.xxx.yyy 的子模块/符号在名字解析阶段总是可见（因为它们属于同一个 module tree）。
-// 外部可见性：在 module foo 中 import math 之后，foo 只能访问 math 的“公开表面”：
-// math 自己公开导出的符号（函数/常量/类型）
-// 以及 math 显式导出的子模块（比如 export module math.xxx;），并且递归地只有被导出的子模块链路才可见
-// math 可以 export import other; 把别的模块挂到自己的公开表面（re-export），外部通过 math.other... 访问
+// 内部可见性：在 module X 内部，X::Y::Z 形式的子模块/符号在名字解析阶段总是可见（因为它们属于同一个 module tree）。
+// 外部可见性：在 module foo 中 import X 之后，foo 只能访问 X 的“公开表面”（X::name）。
+// X 自己公开导出的符号（函数/常量/类型）
+// 以及 X 显式导出的子模块（比如 export module X.Y;），并且递归地只有被导出的子模块链路才可见
+// X 可以 export import other; 让下游 import X 时也能看到 other（仍通过 other::name 访问）
 // 实现上就是：每个模块维护两张符号表：private（给自身/子模块用）和 public（给外部用）。export 只影响 public 表。
-// import math 只把 math.public 挂到当前作用域下的一个名字 math，而不是把整棵树“拍扁”到当前命名空间。
+// import X 会引入一个命名空间 X，只能用 X::name 访问；需要拍扁到当前作用域用 using。
 
 // 导出任何被export的符号
 
